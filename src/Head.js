@@ -37,7 +37,7 @@ class Head {
 
     this.updatePositions(this.node.style.top, this.node.style.left);
 
-    if (!snakeState.ghost) {
+    if (!ghostState) {
       if (!this.asteroidCheck(this.node.style.top, this.node.style.left)) return this.gameOver('asteroid');
       if (!this.snakeCheck()) return this.gameOver('ate self');
     }
@@ -51,8 +51,8 @@ class Head {
     const apple = document.querySelector('#apple');
     if (top === apple.style.top && left === apple.style.left) {
       this.bodyNodes.push(new Body(board));
-      gameState.score += 1;
-      if (gameState.score && gameState.score % 3 === 0) addAsteroid();
+      score += 1;
+      if (score && score % 3 === 0) addAsteroid();
       ghostMode(false);
       place(apple);
       magicApple();

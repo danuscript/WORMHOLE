@@ -64,11 +64,13 @@ const magicApple = () => {
 
 const reset = () => {
   const board = document.querySelector('#board');
-  occupied = new Set(['0px,0px']);
+  occupied.clear();
+  occupied.add('0px,0px');
   board.innerHTML = '';
-  wormholeState = { cooling: false, cooldown: 0 };
-  snakeState = { ghost: false, }
-  gameState = { score: 0, ticks: 0 };
+  wormholeState.cooling = false;
+  wormholeState.cooldown = 0;
+  ghostState = false;
+  score = 0;
   newGame();
 };
 
@@ -77,10 +79,10 @@ const ghostMode = (active) => {
   body.forEach((segment) => {
     if (active) {
       segment.classList.add('ghost');
-      snakeState.ghost = true;
+      ghostState = true;
     } else {
       segment.classList.remove('ghost');
-      snakeState.ghost = false;
+      ghostState = false;
     }
   })
 };
@@ -130,9 +132,9 @@ const tailCorners = {
   down: ['TopLeft', 'TopRight', 'BottomLeft', 'BottomRight'],
 }
 
-let occupied = new Set(['0px,0px']);
-let wormholeState = { cooling: false, cooldown: 0 };
-let snakeState = { ghost: false };
-let gameState = { score: 0, ticks: 0 };
+const occupied = new Set(['0px,0px']);
+const wormholeState = { cooling: false, cooldown: 0 };
+let ghostState = false;
+let score = 0;
 
 document.addEventListener('DOMContentLoaded', newGame);
