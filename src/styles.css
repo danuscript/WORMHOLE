@@ -4,38 +4,6 @@ body {
   justify-content: center;
 }
 
-#head {
-  height: 50px;
-  width: 50px;
-  background: url(./assets/eyes-side.png), rgb(114, 200, 68);
-  position: absolute;
-  z-index: 2;
-  border-radius: 15px;
-}
-
-.bodySegment {
-  height: 50px;
-  width: 50px;
-  background-color: greenyellow;
-  position: absolute;
-  z-index: 1;
-}
-
-.ghost {
-  opacity: 0.5;
-}
-
-.wormhole {
-  height: 50px;
-  width: 50px;
-  position: absolute;
-  background-image: url(./assets/energy.gif);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 60px;
-  background-color: rgb(0, 0, 0);
-}
-
 #board {
   height: 700px;
   width: 700px;
@@ -45,14 +13,26 @@ body {
   overflow: hidden;
 }
 
-#apple {
+#board > img, div {
   height: 50px;
   width: 50px;
   position: absolute;
 }
 
-#asteroid {
-  height: 50px;
-  width: 50px;
-  position: absolute;
+#head {
+  background: url(./assets/eyes-side.png), rgb(114, 200, 68);
+  z-index: 2;
+  border-radius: 15px;
+}
+
+.bodySegment {
+  z-index: 1;
+}
+
+.ghost {
+  opacity: 0.5;
+}
+
+.wormhole {
+  background: black url(./assets/energy.gif) center/60px no-repeat;
 }
