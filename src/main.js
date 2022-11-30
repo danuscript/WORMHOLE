@@ -23,7 +23,7 @@ const generatePos = () => {
 };
 
 const wormholeTimer = () => {
-  const {cooling, cooldown} = wormholeState;
+  const { cooling, cooldown } = wormholeState;
   if (cooling && cooldown === 0) {
     const wormholeA = document.querySelector('#wormhole-a');
     const wormholeB = document.querySelector('#wormhole-b');
@@ -85,12 +85,12 @@ const ghostMode = (active) => {
 };
 
 const updateCorners = (direction, node, corners) => {
-  const [cornerA, cornerB, cornerC, cornerD] = corners[direction];
-  node.style[`border${cornerA}Radius`] = '20px';
-  node.style[`border${cornerB}Radius`] = '20px';
-  node.style[`border${cornerC}Radius`] = '0px';
-  node.style[`border${cornerD}Radius`] = '0px';
-}
+  const { round, square } = corners[direction];
+  node.style[`border${round[0]}Radius`] = '20px';
+  node.style[`border${round[1]}Radius`] = '20px';
+  node.style[`border${square[0]}Radius`] = '0px';
+  node.style[`border${square[1]}Radius`] = '0px';
+};
 
 const movement = {
   left: ['left', -50],
@@ -116,18 +116,18 @@ const wasdControls = {
 const colors = ['#ECCA2F', '#F78331', '#E0376E', '#8231F7', '#45A7FF'];
 
 const headCorners = {
-  left: ['TopLeft', 'BottomLeft', 'TopRight', 'BottomRight'],
-  right: ['TopRight', 'BottomRight', 'TopLeft', 'BottomLeft'],
-  up: ['TopLeft', 'TopRight', 'BottomLeft', 'BottomRight'],
-  down: ['BottomLeft', 'BottomRight', 'TopLeft', 'TopRight'],
+  left: { round: ['TopLeft', 'BottomLeft'], square: ['TopRight', 'BottomRight'] },
+  right: { round: ['TopRight', 'BottomRight'], square: ['TopLeft', 'BottomLeft'] },
+  up: { round: ['TopLeft', 'TopRight'], square: ['BottomLeft', 'BottomRight'] },
+  down: { round: ['BottomLeft', 'BottomRight'], square: ['TopLeft', 'TopRight'] },
 };
 
 const tailCorners = {
-  left: ['TopRight', 'BottomRight', 'TopLeft', 'BottomLeft'],
-  right: ['TopLeft', 'BottomLeft', 'TopRight', 'BottomRight'],
-  up: ['BottomLeft', 'BottomRight', 'TopLeft', 'TopRight'],
-  down: ['TopLeft', 'TopRight', 'BottomLeft', 'BottomRight'],
-}
+  left: headCorners.right,
+  right: headCorners.left,
+  up: headCorners.down,
+  down: headCorners.up,
+};
 
 const occupied = new Set(['0px,0px']);
 const wormholeState = { cooling: false, cooldown: 0 };

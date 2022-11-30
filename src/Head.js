@@ -66,7 +66,7 @@ class Head {
 
   snakeCheck() {
     for (let i = 0; i < this.positions.length - 3; i += 1) {
-      const {top, left} = this.positions[i];
+      const { top, left } = this.positions[i];
       if (this.node.style.top === top && this.node.style.left === left) {
         return false;
       }
