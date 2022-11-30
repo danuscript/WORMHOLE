@@ -10,50 +10,37 @@ class Head {
     this.SPEED = 200;
     this.node.style.top = 0;
     this.node.style.left = 0;
-    this.node.style.borderTopLeftRadius = '15px';
-    this.node.style.borderTopRightRadius = '15px';
-    this.node.style.borderBottomLeftRadius = '15px';
-    this.node.style.borderBottomRightRadius = '15px';
 
     setTimeout(this.move.bind(this), this.SPEED);
   }
 
   move() {
-    
-    console.log(occupied.size);
-    gameState.ticks += 1;
     const head = this.node;
     const direction = this.currentDirection;
 
     head.style.background = (direction === 'left' || direction === 'right')
       ? 'url(src/assets/eyes-side.png) rgb(114, 200, 68)'
-      : 'url(src/assets/eyes-up.png) rgb(114, 200, 68)'
-    
+      : 'url(src/assets/eyes-up.png) rgb(114, 200, 68)';
+
     const currentPositions = {
       top: +head.style.top.slice(0, -2),
       left: +head.style.left.slice(0, -2),
     };
+
     const [axis, offset] = movement[direction];
     head.style[axis] = `${currentPositions[axis] += offset}px`;
 
     this.wraparound(currentPositions.top, currentPositions.left);
     this.updateSnake(this.node.style.top, this.node.style.left);
-    updateHeadCorners(direction, head, headCorners);
-    if (!this.bodyNodes.length) {
-      head.style.borderTopLeftRadius = '15px';
-      head.style.borderTopRightRadius = '15px';
-      head.style.borderBottomLeftRadius = '15px';
-      head.style.borderBottomRightRadius = '15px';
-    }
+    updateCorners(direction, head, headCorners);
+    if (!this.bodyNodes.length) head.style.borderRadius = '15px';
     this.teleport(this.node.style.top, this.node.style.left);
-    
+
     this.updatePositions();
 
     if (!this.asteroidCheck() && !snakeState.ghost) return this.gameOver('asteroid');
 
     if (!this.snakeCheck() && !snakeState.ghost) return this.gameOver('ate self');
-
-    
 
     this.updateBodyNodes();
 
@@ -134,7 +121,7 @@ class Head {
       bodyNode.node.style.left = this.positions[i][1];
       bodyNode.node.style.backgroundColor = colors[i % 5];
       if (!i) {
-        updateHeadCorners(this.positions[i + 1][2], bodyNode.node, tailCorners)
+        updateCorners(this.positions[i + 1][2], bodyNode.node, tailCorners)
       }
     })
   }

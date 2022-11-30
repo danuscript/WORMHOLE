@@ -101,7 +101,7 @@ const ghostMode = (active) => {
   })
 };
 
-const updateHeadCorners = (direction, node, corners) => {
+const updateCorners = (direction, node, corners) => {
   const [cornerA, cornerB, cornerC, cornerD] = corners[direction];
   node.style[`border${cornerA}Radius`] = '20px';
   node.style[`border${cornerB}Radius`] = '20px';
