@@ -77,14 +77,11 @@ const reset = () => {
 const ghostMode = (active) => {
   const body = document.querySelectorAll('.bodySegment');
   body.forEach((segment) => {
-    if (active) {
-      segment.classList.add('ghost');
-      ghostState = true;
-    } else {
-      segment.classList.remove('ghost');
-      ghostState = false;
-    }
-  })
+    active
+      ? segment.classList.add('ghost')
+      : segment.classList.remove('ghost');
+  });
+  ghostState = active;
 };
 
 const updateCorners = (direction, node, corners) => {

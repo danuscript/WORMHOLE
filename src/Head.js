@@ -31,7 +31,6 @@ class Head {
     this.updateEyes(direction);
     this.wraparound(currentPositions.top, currentPositions.left);
     this.updateState(this.node.style.top, this.node.style.left, wormholeA, wormholeB);
-    updateCorners(direction, head, headCorners);
     if (!this.bodyNodes.length) head.style.borderRadius = '15px';
     this.teleport(this.node.style.top, this.node.style.left, wormholeA, wormholeB);
 
