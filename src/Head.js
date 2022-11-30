@@ -5,7 +5,7 @@ class Head {
     el.appendChild(this.node);
 
     this.bodyNodes = [];
-    this.positions = [['0px', '0px', 'right']];
+    this.positions = [{ top: '0px', left: '0px', dir: 'right' }];
 
     this.currentDirection = 'right';
     this.SPEED = 200;
@@ -18,38 +18,37 @@ class Head {
   move() {
     const head = this.node;
     const direction = this.currentDirection;
+    const wormholeA = document.querySelector('#wormhole-a');
+    const wormholeB = document.querySelector('#wormhole-b');
     const currentPositions = {
       top: +head.style.top.slice(0, -2),
       left: +head.style.left.slice(0, -2),
     };
 
-    this.updateEyes(direction);
-
     const [axis, offset] = movement[direction];
     head.style[axis] = `${currentPositions[axis] += offset}px`;
 
+    this.updateEyes(direction);
     this.wraparound(currentPositions.top, currentPositions.left);
-    this.updateSnake(this.node.style.top, this.node.style.left);
+    this.updateState(this.node.style.top, this.node.style.left, wormholeA, wormholeB);
     updateCorners(direction, head, headCorners);
     if (!this.bodyNodes.length) head.style.borderRadius = '15px';
-    this.teleport(this.node.style.top, this.node.style.left);
+    this.teleport(this.node.style.top, this.node.style.left, wormholeA, wormholeB);
 
-    this.updatePositions();
+    this.updatePositions(this.node.style.top, this.node.style.left);
 
-    if (!this.asteroidCheck() && !snakeState.ghost) return this.gameOver('asteroid');
-
-    if (!this.snakeCheck() && !snakeState.ghost) return this.gameOver('ate self');
+    if (!snakeState.ghost) {
+      if (!this.asteroidCheck(this.node.style.top, this.node.style.left)) return this.gameOver('asteroid');
+      if (!this.snakeCheck()) return this.gameOver('ate self');
+    }
 
     this.updateBodyNodes();
 
     setTimeout(this.move.bind(this), this.SPEED);
   }
 
-  updateSnake(top, left) {
+  updateState(top, left, wormholeA, wormholeB) {
     const apple = document.querySelector('#apple');
-    const wormholeA = document.querySelector('#wormhole-a');
-    const wormholeB = document.querySelector('#wormhole-b');
-
     if (top === apple.style.top && left === apple.style.left) {
       this.bodyNodes.push(new Body(board));
       gameState.score += 1;
@@ -62,11 +61,13 @@ class Head {
         place(wormholeA, wormholeB);
       }
     }
+
+    updateCorners(this.currentDirection, this.node, headCorners);
   }
 
   snakeCheck() {
     for (let i = 0; i < this.positions.length - 3; i += 1) {
-      const [top, left] = this.positions[i];
+      const {top, left} = this.positions[i];
       if (this.node.style.top === top && this.node.style.left === left) {
         return false;
       }
@@ -74,11 +75,11 @@ class Head {
     return true;
   }
 
-  asteroidCheck() {
+  asteroidCheck(top, left) {
     const asteroids = document.querySelectorAll('#asteroid');
     for (const asteroid of asteroids) {
-      if (asteroid.style.top === this.node.style.top
-        && asteroid.style.left === this.node.style.left) {
+      if (asteroid.style.top === top
+        && asteroid.style.left === left) {
         return false;
       }
     }
@@ -92,10 +93,7 @@ class Head {
     if (left > 650) this.node.style.left = '0px';
   }
 
-  teleport(top, left) {
-    const wormholeA = document.querySelector('#wormhole-a');
-    const wormholeB = document.querySelector('#wormhole-b');
-
+  teleport(top, left, wormholeA, wormholeB) {
     if (top === wormholeA.style.top && left === wormholeA.style.left) {
       this.node.style.top = wormholeB.style.top;
       this.node.style.left = wormholeB.style.left;
@@ -111,23 +109,24 @@ class Head {
     wormholeTimer();
   }
 
-  updatePositions() {
-    this.positions.push([this.node.style.top, this.node.style.left, this.currentDirection]);
-    occupied.add(this.positions.at(-1).toString());
+  updatePositions(top, left) {
+    this.positions.push({ top, left, dir: this.currentDirection });
+    occupied.add(`${top},${left}`);
     if (this.positions.length > this.bodyNodes.length + 1) {
-      const removed = this.positions.shift().toString();
-      occupied.delete(removed);
+      const { top: prevTop, left: prevLeft } = this.positions.shift();
+      occupied.delete(`${prevTop},${prevLeft}`);
     }
   }
 
   updateBodyNodes() {
     this.bodyNodes.forEach((bodyNode, i) => {
-      bodyNode.node.style.top = this.positions[i][0];
-      bodyNode.node.style.left = this.positions[i][1];
+      const { top, left } = this.positions[i];
+      bodyNode.node.style.top = top;
+      bodyNode.node.style.left = left;
       bodyNode.node.style.backgroundColor = colors[i % 5];
     });
     if (this.bodyNodes.length) {
-      updateCorners(this.positions[1][2], this.bodyNodes[0].node, tailCorners);
+      updateCorners(this.positions[1].dir, this.bodyNodes[0].node, tailCorners);
     }
   }
 

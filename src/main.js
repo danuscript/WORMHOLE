@@ -22,11 +22,6 @@ const generatePos = () => {
   return Math.round(randomNum / 50) * 50;
 };
 
-const addAsteroid = () => {
-  const asteroid = new Asteroid(board);
-  place(asteroid.node);
-};
-
 const wormholeTimer = () => {
   const {cooling, cooldown} = wormholeState;
   if (cooling && cooldown === 0) {
@@ -37,7 +32,23 @@ const wormholeTimer = () => {
   } else if (cooling && cooldown > 0) {
     wormholeState.cooldown -= 1;
   }
-}
+};
+
+const place = (...nodes) => {
+  nodes.forEach((node) => {
+    occupied.delete(`${node.style.top},${node.style.left}`);
+    do {
+      node.style.top = `${generatePos()}px`;
+      node.style.left = `${generatePos()}px`;
+    } while (occupied.has(`${node.style.top},${node.style.left}`));
+    occupied.add(`${node.style.top},${node.style.left}`);
+  });
+};
+
+const addAsteroid = () => {
+  const asteroid = new Asteroid(board);
+  place(asteroid.node);
+};
 
 const magicApple = () => {
   const apple = document.querySelector('#apple');
@@ -49,18 +60,6 @@ const magicApple = () => {
     apple.removeAttribute('src');
     apple.setAttribute('src', 'src/assets/star.gif');
   }
-};
-
-const place = (...nodes) => {
-  nodes.forEach((node) => {
-    console.log('node', node);
-    occupied.delete(`${node.style.top},${node.style.left}`);
-    do {
-      node.style.top = `${generatePos()}px`;
-      node.style.left = `${generatePos()}px`;
-    } while (occupied.has(`${node.style.top},${node.style.left}`));
-    occupied.add(`${node.style.top},${node.style.left}`);
-  });
 };
 
 const reset = () => {
