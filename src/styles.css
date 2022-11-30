@@ -1,0 +1,60 @@
+body {
+  background-color: #080749;
+  display: flex;
+  justify-content: center;
+}
+
+#head {
+  height: 50px;
+  width: 50px;
+  background: url(./assets/eyes-side.png), rgb(114, 200, 68);
+  position: absolute;
+  z-index: 2;
+}
+
+.bodySegment {
+  height: 50px;
+  width: 50px;
+  background-color: greenyellow;
+  position: absolute;
+  z-index: 1;
+}
+
+.ghost {
+  opacity: 0.5;
+}
+
+.wormhole {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  background-image: url(./assets/energy.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60px;
+  background-color: white;
+}
+
+#wormhole-b {
+  background-color: white;
+}
+
+#board {
+  height: 700px;
+  width: 700px;
+  border: 2px #d9a3ff solid;
+  background-image: url('assets/space\ background.png');
+  position: relative;
+}
+
+#apple {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+}
+
+#asteroid {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+}
