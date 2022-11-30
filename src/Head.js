@@ -95,11 +95,11 @@ class Head {
     if (top === wormholeA.style.top && left === wormholeA.style.left) {
       this.node.style.top = wormholeB.style.top;
       this.node.style.left = wormholeB.style.left;
-      wormholeState.cooling = true;
-      wormholeState.cooldown = this.positions.length;
     } else if (top === wormholeB.style.top && left === wormholeB.style.left) {
       this.node.style.top = wormholeA.style.top;
       this.node.style.left = wormholeA.style.left;
+    }
+    if (top !== this.node.style.top && left !== this.node.style.top) {
       wormholeState.cooling = true;
       wormholeState.cooldown = this.positions.length;
     }
@@ -120,10 +120,10 @@ class Head {
       bodyNode.node.style.top = this.positions[i][0];
       bodyNode.node.style.left = this.positions[i][1];
       bodyNode.node.style.backgroundColor = colors[i % 5];
-      if (!i) {
-        updateCorners(this.positions[i + 1][2], bodyNode.node, tailCorners)
-      }
-    })
+    });
+    if (this.bodyNodes.length) {
+      updateCorners(this.positions[1][2], this.bodyNodes[0].node, tailCorners);
+    }
   }
 
   gameOver(message) {
