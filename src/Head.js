@@ -73,13 +73,13 @@ class Head {
 
   asteroidCheck() {
     const asteroids = document.querySelectorAll('#asteroid');
-    let valid = true;
-    asteroids.forEach((asteroid) => {
-      if (asteroid.style.top === this.node.style.top && asteroid.style.left === this.node.style.left) {
-        valid = false;
+    for (const asteroid of asteroids) {
+      if (asteroid.style.top === this.node.style.top
+        && asteroid.style.left === this.node.style.left) {
+        return false;
       }
-    })
-    return valid;
+    }
+    return true;
   }
 
   wraparound(top, left) {
