@@ -33,11 +33,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 60px;
-  background-color: white;
-}
-
-#wormhole-b {
-  background-color: white;
+  background-color: rgb(0, 0, 0);
 }
 
 #board {
@@ -46,6 +42,7 @@ body {
   border: 2px #d9a3ff solid;
   background-image: url('assets/space\ background.png');
   position: relative;
+  overflow: hidden;
 }
 
 #apple {

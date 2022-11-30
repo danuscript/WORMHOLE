@@ -6,6 +6,7 @@ class Head {
 
     this.bodyNodes = [];
     this.positions = [['0px', '0px', 'right']];
+
     this.currentDirection = 'right';
     this.SPEED = 200;
     this.node.style.top = 0;
@@ -17,15 +18,12 @@ class Head {
   move() {
     const head = this.node;
     const direction = this.currentDirection;
-
-    head.style.background = (direction === 'left' || direction === 'right')
-      ? 'url(src/assets/eyes-side.png) rgb(114, 200, 68)'
-      : 'url(src/assets/eyes-up.png) rgb(114, 200, 68)';
-
     const currentPositions = {
       top: +head.style.top.slice(0, -2),
       left: +head.style.left.slice(0, -2),
     };
+
+    this.updateEyes(direction);
 
     const [axis, offset] = movement[direction];
     head.style[axis] = `${currentPositions[axis] += offset}px`;
@@ -48,16 +46,21 @@ class Head {
   }
 
   updateSnake(top, left) {
+    const apple = document.querySelector('#apple');
+    const wormholeA = document.querySelector('#wormhole-a');
+    const wormholeB = document.querySelector('#wormhole-b');
+
     if (top === apple.style.top && left === apple.style.left) {
       this.bodyNodes.push(new Body(board));
       gameState.score += 1;
-      if (gameState.score && gameState.score % 3 === 0) {
-        placeAsteroid()
-      }
+      if (gameState.score && gameState.score % 3 === 0) addAsteroid();
       ghostMode(false);
-      placeApple();
+      place(apple);
+      magicApple();
       if (this.SPEED > 20) this.SPEED -= 8;
-      if (!wormholeState.cooldown) placeWormHoles();
+      if (!wormholeState.cooldown) {
+        place(wormholeA, wormholeB);
+      }
     }
   }
 
@@ -92,6 +95,7 @@ class Head {
   teleport(top, left) {
     const wormholeA = document.querySelector('#wormhole-a');
     const wormholeB = document.querySelector('#wormhole-b');
+
     if (top === wormholeA.style.top && left === wormholeA.style.left) {
       this.node.style.top = wormholeB.style.top;
       this.node.style.left = wormholeB.style.left;
@@ -99,6 +103,7 @@ class Head {
       this.node.style.top = wormholeA.style.top;
       this.node.style.left = wormholeA.style.left;
     }
+
     if (top !== this.node.style.top && left !== this.node.style.top) {
       wormholeState.cooling = true;
       wormholeState.cooldown = this.positions.length;
@@ -124,6 +129,12 @@ class Head {
     if (this.bodyNodes.length) {
       updateCorners(this.positions[1][2], this.bodyNodes[0].node, tailCorners);
     }
+  }
+
+  updateEyes(direction) {
+    this.node.style.background = (direction === 'left' || direction === 'right')
+      ? 'url(src/assets/eyes-side.png) rgb(114, 200, 68)'
+      : 'url(src/assets/eyes-up.png) rgb(114, 200, 68)';
   }
 
   gameOver(message) {
